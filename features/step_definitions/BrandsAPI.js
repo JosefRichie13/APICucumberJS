@@ -1,7 +1,7 @@
 import { Given, Then } from '@cucumber/cucumber';
 import request from 'supertest';
 import configs from '../support/configs.js';
-import { assert, expect } from 'chai';
+import { assert } from 'chai';
 
 var resultFromAPI
 
@@ -29,7 +29,7 @@ Then('I should {string} the Brands', async function(APIStatus){
 
             for (var index = 0; index < parsedJSONAPIResult.brands.length; index++) {
                 assert.notEqual(parsedJSONAPIResult.brands[index].id, null);
-                assert.notEqual(parsedJSONAPIResult.brands[index].id, null);
+                assert.notEqual(parsedJSONAPIResult.brands[index].brand, null);
             }
             break
         case "not be allowed to update":
