@@ -24,11 +24,11 @@ Then('I should {string} the products', async function(APIStatus){
         case "be allowed to see":
             expect(resultFromAPI.text).to.contain('products').and.to.contain('id').and.to.contain('name')
                 .and.to.contain('price').and.to.contain('brand').and.to.contain('category');    
-            expect(resultFromAPI.text).to.contain("200")          
+            expect(resultFromAPI.text).to.contain("\"responseCode\": 200")           
             break
         case "not be allowed to update":
             expect(resultFromAPI.text).to.contain("This request method is not supported")
-            expect(resultFromAPI.text).to.contain("405")
+            expect(resultFromAPI.text).to.contain("\"responseCode\": 405")        
             break
         default :
             throw new Error("Incorrect APIStatus " + APIStatus)         
@@ -56,11 +56,11 @@ Then('I should {string} the product search result', async function(APIStatus){
         case "get":
             expect(resultFromAPI.text).to.contain('products').and.to.contain('id').and.to.contain('name')
                 .and.to.contain('price').and.to.contain('brand').and.to.contain('category');    
-            expect(resultFromAPI.text).to.contain("200")          
+            expect(resultFromAPI.text).to.contain("\"responseCode\": 200")             
             break
         case "not get":
             expect(resultFromAPI.text).to.contain("Bad request, search_product parameter is missing in POST request")
-            expect(resultFromAPI.text).to.contain("400")
+            expect(resultFromAPI.text).to.contain("\"responseCode\": 400")        
             break
         default :
             throw new Error("Incorrect APIStatus " + APIStatus)         

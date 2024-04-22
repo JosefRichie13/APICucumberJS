@@ -33,29 +33,29 @@ Given('I verify that a random user {string}', async function(UserStatus){
         case "does not exist":
             resultFromAPI = await request(configs.BaseURL).post('/verifyLogin').field('email', generateRandomEmail()).field('password', generateRandomPassword())
             expect(resultFromAPI.text).to.contain("User not found!")
-            expect(resultFromAPI.text).to.contain("404")
+            expect(resultFromAPI.text).to.contain("\"responseCode\": 404")        
             console.log("Created email is " + generatedEmail)
             console.log("Created password is " + generatedPassword)
             break
         case "exists":
             resultFromAPI = await request(configs.BaseURL).post('/verifyLogin').field('email', generatedEmail).field('password', generatedPassword)
             expect(resultFromAPI.text).to.contain("User exists!")
-            expect(resultFromAPI.text).to.contain("200")
+            expect(resultFromAPI.text).to.contain("\"responseCode\": 200")        
             break
         case "cannot be searched without email":
             resultFromAPI = await request(configs.BaseURL).post('/verifyLogin').field('password', generatedPassword)
             expect(resultFromAPI.text).to.contain("Bad request, email or password parameter is missing in POST request")
-            expect(resultFromAPI.text).to.contain("400")
+            expect(resultFromAPI.text).to.contain("\"responseCode\": 400")        
             break
         case "cannot be deleted with the DELETE method":    
             resultFromAPI = await request(configs.BaseURL).delete('/verifyLogin').field('email', generatedEmail).field('password', generatedPassword)
             expect(resultFromAPI.text).to.contain("This request method is not supported")
-            expect(resultFromAPI.text).to.contain("405")
+            expect(resultFromAPI.text).to.contain("\"responseCode\": 405")        
             break
         case "cannot be searched with incorrect details":
             resultFromAPI = await request(configs.BaseURL).post('/verifyLogin').field('email', generatedEmail+generatedEmail).field('password', generatedPassword+generatedPassword)    
             expect(resultFromAPI.text).to.contain("User not found")
-            expect(resultFromAPI.text).to.contain("404")
+            expect(resultFromAPI.text).to.contain("\"responseCode\": 404")        
             break
         default :
             throw new Error("Incorrect UserStatus " + UserStatus)         
@@ -86,7 +86,7 @@ When('I create a random user', async function(){
         .field('mobile_number', generatedUserName)
 
     expect(resultFromAPI.text).to.contain("User created!")
-    expect(resultFromAPI.text).to.contain("201")
+    expect(resultFromAPI.text).to.contain("\"responseCode\": 201")        
 
 })
 
@@ -98,7 +98,7 @@ When('I update the random user', async function(){
         .field('country', "India")
 
     expect(resultFromAPI.text).to.contain("User updated!")   
-    expect(resultFromAPI.text).to.contain("200")
+    expect(resultFromAPI.text).to.contain("\"responseCode\": 200")        
 
 })
 
@@ -128,6 +128,6 @@ When('I delete a random user', async function(){
 
     const resultFromAPI = await request(configs.BaseURL).delete('/deleteAccount').field('email', generatedEmail).field('password', generatedPassword)
     expect(resultFromAPI.text).to.contain("Account deleted!")
-    expect(resultFromAPI.text).to.contain("200")
+    expect(resultFromAPI.text).to.contain("\"responseCode\": 200")        
     
 })
