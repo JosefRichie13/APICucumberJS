@@ -1,7 +1,7 @@
 import { Given, Then } from '@cucumber/cucumber';
 import request from 'supertest';
 import configs from '../support/configs.js';
-import { expect } from 'chai';
+import { assert, expect } from 'chai';
 
 var resultFromAPI
 
@@ -20,14 +20,21 @@ Given('I {string} all the Brands', async function(APIEndpoint){
 
 
 Then('I should {string} the Brands', async function(APIStatus){
+
+    var  parsedJSONAPIResult = JSON.parse(resultFromAPI.text)
+
     switch(APIStatus){
         case "be allowed to see":
-            expect(resultFromAPI.text).to.contain('brands').and.to.contain('id').and.to.contain('brand')
-            expect(resultFromAPI.text).to.contain("\"responseCode\": 200")          
+            assert.equal(parsedJSONAPIResult.responseCode, 200)
+
+            for (var index = 0; index < parsedJSONAPIResult.brands.length; index++) {
+                assert.notEqual(parsedJSONAPIResult.brands[index].id, null);
+                assert.notEqual(parsedJSONAPIResult.brands[index].id, null);
+            }
             break
         case "not be allowed to update":
-            expect(resultFromAPI.text).to.contain("This request method is not supported")
-            expect(resultFromAPI.text).to.contain("\"responseCode\": 405")   
+            assert.equal(parsedJSONAPIResult.responseCode, 405)
+            assert.equal(parsedJSONAPIResult.message, "This request method is not supported.");
             break
         default :
             throw new Error("Incorrect APIStatus " + APIStatus)         
