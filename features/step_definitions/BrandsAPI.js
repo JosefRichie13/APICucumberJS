@@ -21,7 +21,7 @@ Given('I {string} all the Brands', async function(APIEndpoint){
 
 Then('I should {string} the Brands', async function(APIStatus){
 
-    var  parsedJSONAPIResult = JSON.parse(resultFromAPI.text)
+    var parsedJSONAPIResult = JSON.parse(resultFromAPI.text)
 
     switch(APIStatus){
         case "be allowed to see":
