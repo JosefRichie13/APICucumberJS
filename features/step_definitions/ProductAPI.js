@@ -3,16 +3,16 @@ import request from 'supertest';
 import configs from '../support/configs.js';
 import { expect, assert } from 'chai';
 
-var resultFromAPI
-var searchParamFromTable
+//var resultFromAPI
+//var searchParamFromTable
 
 Given('I {string} all the Products', async function(APIEndpoint){
     switch(APIEndpoint){
         case "get":
-            resultFromAPI = await request(configs.BaseURL).get('/productsList')
+            this.resultFromAPI = await request(configs.BaseURL).get('/productsList')
             break
         case "update":
-            resultFromAPI = await request(configs.BaseURL).post('/productsList')
+            this.resultFromAPI = await request(configs.BaseURL).post('/productsList')
             break
         default :
             throw new Error("Incorrect APIEndpoint " + APIEndpoint)         
@@ -22,7 +22,7 @@ Given('I {string} all the Products', async function(APIEndpoint){
 
 Then('I should {string} the products', async function(APIStatus){
 
-    var parsedJSONAPIResult = JSON.parse(resultFromAPI.text)
+    var parsedJSONAPIResult = JSON.parse(this.resultFromAPI.text)
 
     switch(APIStatus){
         case "be allowed to see":
@@ -47,28 +47,28 @@ Then('I should {string} the products', async function(APIStatus){
 
 Given('I search for a product using', async function(table){
 
-    searchParamFromTable = table.hashes()[0]['search_product']
+    this.searchParamFromTable = table.hashes()[0]['search_product']
 
     // If the search param's length is 0, we are not searching using the search_product search param
     // or else, we get it from the BDD and add it
-    if (searchParamFromTable.length == 0){
-        resultFromAPI = await request(configs.BaseURL).post('/searchProduct')
+    if (this.searchParamFromTable.length == 0){
+        this.resultFromAPI = await request(configs.BaseURL).post('/searchProduct')
     }
     else {
-        resultFromAPI = await request(configs.BaseURL).post('/searchProduct').field('search_product', searchParamFromTable)
+        this.resultFromAPI = await request(configs.BaseURL).post('/searchProduct').field('search_product', this.searchParamFromTable)
     }
 })
 
 
 Then('I should {string} the product search result', async function(APIStatus){
 
-    var  parsedJSONAPIResult = JSON.parse(resultFromAPI.text)
+    var  parsedJSONAPIResult = JSON.parse(this.resultFromAPI.text)
 
     switch(APIStatus){
         case "get":
             for (var index = 0; index < parsedJSONAPIResult.products.length; index++) {
                 assert.notEqual(parsedJSONAPIResult.products[index].id, null);
-                expect(parsedJSONAPIResult.products[index].name).to.contain(searchParamFromTable) 
+                expect(parsedJSONAPIResult.products[index].name).to.contain(this.searchParamFromTable) 
                 assert.notEqual(parsedJSONAPIResult.products[index].price, null);
                 assert.notEqual(parsedJSONAPIResult.products[index].brand, null);
                 assert.notEqual(parsedJSONAPIResult.products[index].category, null);

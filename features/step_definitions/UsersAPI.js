@@ -4,11 +4,10 @@ import { fakerDE as faker } from '@faker-js/faker';
 import configs from '../support/configs.js';
 import { assert } from 'chai';
 
-// These variables hold the generated fake Email, Password, UserName and the API reponse
+// These variables hold the generated fake Email, Password and UserName
 var generatedEmail
 var generatedPassword
 var generatedUserName
-var resultFromAPI
 
 // Generates a fake email and stores it in the variable, generatedEmail
 function generateRandomEmail(){
@@ -29,7 +28,7 @@ function generateRandomUserName(){
 Given('I verify that a random user {string}', async function(UserStatus){
     switch(UserStatus){
         case "does not exist":
-            resultFromAPI = await request(configs.BaseURL).post('/verifyLogin').field('email', generateRandomEmail()).field('password', generateRandomPassword())
+            var resultFromAPI = await request(configs.BaseURL).post('/verifyLogin').field('email', generateRandomEmail()).field('password', generateRandomPassword())
             var parsedJSONAPIResult = JSON.parse(resultFromAPI.text)
             assert.equal(parsedJSONAPIResult.message, "User not found!");
             assert.equal(parsedJSONAPIResult.responseCode, 404)
@@ -37,25 +36,25 @@ Given('I verify that a random user {string}', async function(UserStatus){
             console.log("Created password is " + generatedPassword)
             break
         case "exists":
-            resultFromAPI = await request(configs.BaseURL).post('/verifyLogin').field('email', generatedEmail).field('password', generatedPassword)
+            var resultFromAPI = await request(configs.BaseURL).post('/verifyLogin').field('email', generatedEmail).field('password', generatedPassword)
             var parsedJSONAPIResult = JSON.parse(resultFromAPI.text)
             assert.equal(parsedJSONAPIResult.message, "User exists!");
             assert.equal(parsedJSONAPIResult.responseCode, 200)    
             break
         case "cannot be searched without email":
-            resultFromAPI = await request(configs.BaseURL).post('/verifyLogin').field('password', generatedPassword)
+            var resultFromAPI = await request(configs.BaseURL).post('/verifyLogin').field('password', generatedPassword)
             var parsedJSONAPIResult = JSON.parse(resultFromAPI.text)
             assert.equal(parsedJSONAPIResult.message, "Bad request, email or password parameter is missing in POST request.");
             assert.equal(parsedJSONAPIResult.responseCode, 400)      
             break
         case "cannot be deleted with the DELETE method":    
-            resultFromAPI = await request(configs.BaseURL).delete('/verifyLogin').field('email', generatedEmail).field('password', generatedPassword)
+            var resultFromAPI = await request(configs.BaseURL).delete('/verifyLogin').field('email', generatedEmail).field('password', generatedPassword)
             var parsedJSONAPIResult = JSON.parse(resultFromAPI.text)
             assert.equal(parsedJSONAPIResult.message, "This request method is not supported.");
             assert.equal(parsedJSONAPIResult.responseCode, 405)     
             break
         case "cannot be searched with incorrect details":
-            resultFromAPI = await request(configs.BaseURL).post('/verifyLogin').field('email', generatedEmail+generatedEmail).field('password', generatedPassword+generatedPassword)    
+            var resultFromAPI = await request(configs.BaseURL).post('/verifyLogin').field('email', generatedEmail+generatedEmail).field('password', generatedPassword+generatedPassword)    
             var parsedJSONAPIResult = JSON.parse(resultFromAPI.text)
             assert.equal(parsedJSONAPIResult.message, "User not found!");
             assert.equal(parsedJSONAPIResult.responseCode, 404)  
@@ -69,7 +68,7 @@ When('I create a random user', async function(){
 
     generateRandomUserName()
 
-    resultFromAPI = await request(configs.BaseURL).post('/createAccount')
+    var resultFromAPI = await request(configs.BaseURL).post('/createAccount')
         .field('name', generatedUserName)
         .field('email', generatedEmail)
         .field('password', generatedPassword)
@@ -97,7 +96,7 @@ When('I create a random user', async function(){
 
 When('I update the random user', async function(){
 
-    resultFromAPI = await request(configs.BaseURL).put('/updateAccount')
+    var resultFromAPI = await request(configs.BaseURL).put('/updateAccount')
         .field('email', generatedEmail)
         .field('password', generatedPassword)
         .field('country', "India")
@@ -113,13 +112,13 @@ When('I update the random user', async function(){
 When('I verify the user {string}', async function(UserAction){
     switch(UserAction){
         case "update":
-            resultFromAPI = await request(configs.BaseURL).get('/getUserDetailByEmail?email='+generatedEmail)
+            var resultFromAPI = await request(configs.BaseURL).get('/getUserDetailByEmail?email='+generatedEmail)
             var parsedJSONAPIResult = JSON.parse(resultFromAPI.text)
             assert.equal(parsedJSONAPIResult.user.country, "India");
             assert.equal(parsedJSONAPIResult.responseCode, 200)
             break
         case "delete":
-            resultFromAPI = await request(configs.BaseURL).get('/getUserDetailByEmail?email='+generatedEmail)
+            var resultFromAPI = await request(configs.BaseURL).get('/getUserDetailByEmail?email='+generatedEmail)
             var parsedJSONAPIResult = JSON.parse(resultFromAPI.text)
             assert.equal(parsedJSONAPIResult.message, "Account not found with this email, try another email!");
             assert.equal(parsedJSONAPIResult.responseCode, 404)
@@ -132,7 +131,7 @@ When('I verify the user {string}', async function(UserAction){
 
 When('I delete a random user', async function(){
 
-    resultFromAPI = await request(configs.BaseURL).delete('/deleteAccount').field('email', generatedEmail).field('password', generatedPassword)
+    var resultFromAPI = await request(configs.BaseURL).delete('/deleteAccount').field('email', generatedEmail).field('password', generatedPassword)
     var parsedJSONAPIResult = JSON.parse(resultFromAPI.text)
     assert.equal(parsedJSONAPIResult.message, "Account deleted!");
     assert.equal(parsedJSONAPIResult.responseCode, 200)

@@ -3,15 +3,14 @@ import request from 'supertest';
 import configs from '../support/configs.js';
 import { assert } from 'chai';
 
-var resultFromAPI
 
 Given('I {string} all the Brands', async function(APIEndpoint){
     switch(APIEndpoint){
         case "get":
-            resultFromAPI = await request(configs.BaseURL).get('/brandsList')
+            this.resultFromAPI = await request(configs.BaseURL).get('/brandsList')
             break
         case "update":
-            resultFromAPI = await request(configs.BaseURL).put('/brandsList')
+            this.resultFromAPI = await request(configs.BaseURL).put('/brandsList')
             break
         default :
             throw new Error("Incorrect APIEndpoint " + APIEndpoint)         
@@ -21,7 +20,7 @@ Given('I {string} all the Brands', async function(APIEndpoint){
 
 Then('I should {string} the Brands', async function(APIStatus){
 
-    var parsedJSONAPIResult = JSON.parse(resultFromAPI.text)
+    var parsedJSONAPIResult = JSON.parse(this.resultFromAPI.text)
 
     switch(APIStatus){
         case "be allowed to see":
