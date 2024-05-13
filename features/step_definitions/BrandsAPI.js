@@ -2,6 +2,7 @@ import { Given, Then } from '@cucumber/cucumber';
 import request from 'supertest';
 import configs from '../support/configs.js';
 import { assert } from 'chai';
+import fs from 'fs';
 
 
 Given('I {string} all the Brands', async function(APIEndpoint){
@@ -11,6 +12,10 @@ Given('I {string} all the Brands', async function(APIEndpoint){
             break
         case "update":
             this.resultFromAPI = await request(configs.BaseURL).put('/brandsList')
+            break
+        case "get_save":
+            this.resultFromAPI = await request(configs.BaseURL).get('/brandsList')
+            fs.writeFile("./features/schemas/BrandsAPI_Data.json", JSON.stringify(JSON.parse(this.resultFromAPI.text)), (err) => { }) 
             break
         default :
             throw new Error("Incorrect APIEndpoint " + APIEndpoint)         
