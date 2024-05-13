@@ -2,11 +2,7 @@
     "properties": {
         "responseCode": {
             "type": "number",
-	        "oneOf": [
-	             {"const": 200},
-	             {"const": 404},
-	             {"const": 400}
-	        ]
+	        "const": 200
         },
         "brands":{
             "type": "array",

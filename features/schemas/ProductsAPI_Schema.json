@@ -1,0 +1,72 @@
+{
+    "properties": {
+      "responseCode": {
+        "type": "number",
+        "const": 200
+      },
+      "products": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "properties": {
+            "id": {
+              "type": "number",
+              "minimum": 1
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "price": {
+              "type": "string",
+              "minLength": 1
+            },
+            "brand": {
+              "type": "string",
+              "minLength": 1
+            },
+            "category": {
+              "type": "object",
+              "properties": {
+                "usertype": {
+                  "type": "object",
+                  "properties": {
+                    "usertype": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "usertype"
+                  ],
+                  "additionalProperties": false
+                },
+                "category": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "usertype",
+                "category"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "price",
+            "brand",
+            "category"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "responseCode",
+      "products"
+    ],
+    "additionalProperties": false
+  }
