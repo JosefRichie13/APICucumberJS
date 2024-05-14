@@ -1,0 +1,83 @@
+{
+	"properties": {
+	    "responseCode": {
+	        "type": "number",
+	        "const": 200
+	    },
+	    "user":{
+	        "type": "object",
+	        "properties": {
+	            "id": {
+	                "type": "number",
+	                "minimum": 1
+	            },
+	            "name":{
+	                "type": "string",
+	                "minLength": 1
+	            },
+	            "email":{
+	                "type": "string",
+	                "minLength": 1,
+	                "pattern": "^\\S+@\\S+\\.\\S+$"
+	            },
+	            "title":{
+	                "type": "string",
+	                "minLength": 1
+	            },
+	            "birth_day":{
+	                "type": "string",
+	                "minLength": 1
+	            },
+	            "birth_month":{
+	                "type": "string",
+	                "minLength": 1
+	            },
+	            "birth_year":{
+	                "type": "string",
+	                "minLength": 1
+	            },
+	            "first_name":{
+	                "type": "string",
+	                "minLength": 1
+	            },
+	            "last_name":{
+	                "type": "string",
+	                "minLength": 1
+	            },
+	            "company":{
+	                "type": "string",
+	                "minLength": 1
+	            },
+	            "address1":{
+	                "type": "string",
+	                "minLength": 1
+	            },
+	            "address2":{
+	                "type": "string",
+	                "minLength": 1
+	            },
+	            "country":{
+	                "type": "string",
+	                "minLength": 1
+	            },
+	            "state":{
+	                "type": "string",
+	                "minLength": 1
+	            },
+	            "city":{
+	                "type": "string",
+	                "minLength": 1
+	            },
+	            "zipcode":{
+	                "type": "string",
+	                "minLength": 1
+	            }
+	        },
+	    "required": ["id", "name","email", "title","birth_day", "birth_month","birth_year", "first_name"
+	            ,"last_name", "company","address1", "address2","country", "state", "city", "zipcode"],
+        "additionalProperties": false
+	    }
+	},
+    "required": ["responseCode", "user"],
+    "additionalProperties": false
+}

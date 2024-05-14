@@ -3,6 +3,7 @@ import request from 'supertest';
 import { fakerDE as faker } from '@faker-js/faker';
 import configs from '../support/configs.js';
 import { assert } from 'chai';
+import fs from 'fs';
 
 // These variables hold the generated fake Email, Password and UserName
 var generatedEmail
@@ -114,6 +115,7 @@ When('I verify the user {string}', async function(UserAction){
         case "update":
             var resultFromAPI = await request(configs.BaseURL).get('/getUserDetailByEmail?email='+generatedEmail)
             var parsedJSONAPIResult = JSON.parse(resultFromAPI.text)
+            fs.writeFile("./features/schemas/UserAPI_Data.json", JSON.stringify(parsedJSONAPIResult), (err) => { }) 
             assert.equal(parsedJSONAPIResult.user.country, "India");
             assert.equal(parsedJSONAPIResult.responseCode, 200)
             break
